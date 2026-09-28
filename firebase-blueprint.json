@@ -1,0 +1,221 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Authenticated user profile for booking photography sessions.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "description": "Firebase Auth UID matching the document ID.",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "displayName": {
+          "type": "string",
+          "description": "Full display name of the user.",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "preferredCity": {
+          "type": "string",
+          "description": "Preferred shoot location or city.",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp of account creation."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp of last profile update."
+        }
+      },
+      "required": ["uid", "displayName", "preferredCity", "createdAt", "updatedAt"]
+    },
+    "Booking": {
+      "title": "Booking",
+      "description": "A photography session booking created by an authenticated client.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "UID of the user who booked the session.",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "clientName": {
+          "type": "string",
+          "description": "Name of the client for the shoot sheet.",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "photographerId": {
+          "type": "string",
+          "description": "ID of the selected photographer.",
+          "minLength": 1,
+          "maxLength": 64,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "photographerName": {
+          "type": "string",
+          "description": "Display name of the selected photographer.",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "category": {
+          "type": "string",
+          "description": "Selected photography specialization.",
+          "enum": [
+            "Wedding",
+            "Pre-Wedding",
+            "Birthday",
+            "Portrait",
+            "Fashion",
+            "Events",
+            "Product Photography",
+            "Travel Photography"
+          ],
+          "minLength": 1,
+          "maxLength": 40
+        },
+        "shootDate": {
+          "type": "string",
+          "description": "Scheduled date in YYYY-MM-DD format.",
+          "minLength": 10,
+          "maxLength": 10,
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+        },
+        "shootTime": {
+          "type": "string",
+          "description": "Scheduled call time slot.",
+          "minLength": 1,
+          "maxLength": 30
+        },
+        "location": {
+          "type": "string",
+          "description": "Shoot venue or city address.",
+          "minLength": 2,
+          "maxLength": 140
+        },
+        "hours": {
+          "type": "integer",
+          "description": "Number of booked coverage hours (1 to 12)."
+        },
+        "packageName": {
+          "type": "string",
+          "description": "Selected pricing tier package name.",
+          "minLength": 1,
+          "maxLength": 60
+        },
+        "totalPrice": {
+          "type": "number",
+          "description": "Calculated total session price in USD."
+        },
+        "notes": {
+          "type": "string",
+          "description": "Creative direction notes or special requests.",
+          "minLength": 0,
+          "maxLength": 500
+        },
+        "status": {
+          "type": "string",
+          "description": "Current booking lifecycle status.",
+          "enum": ["confirmed", "completed", "cancelled"],
+          "minLength": 1,
+          "maxLength": 20
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when the booking was created."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when the booking was last updated."
+        }
+      },
+      "required": [
+        "userId",
+        "clientName",
+        "photographerId",
+        "photographerName",
+        "category",
+        "shootDate",
+        "shootTime",
+        "location",
+        "hours",
+        "packageName",
+        "totalPrice",
+        "notes",
+        "status",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "ContactInquiry": {
+      "title": "ContactInquiry",
+      "description": "A client inquiry submitted through the Contact Us desk.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "UID of the user submitting the inquiry.",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "name": {
+          "type": "string",
+          "description": "Sender full name.",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "subject": {
+          "type": "string",
+          "description": "Inquiry subject line.",
+          "minLength": 2,
+          "maxLength": 120
+        },
+        "category": {
+          "type": "string",
+          "description": "Photography category of interest.",
+          "minLength": 1,
+          "maxLength": 40
+        },
+        "message": {
+          "type": "string",
+          "description": "Detailed message body.",
+          "minLength": 5,
+          "maxLength": 1000
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp of inquiry submission."
+        }
+      },
+      "required": ["userId", "name", "subject", "category", "message", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "Private user profile documents keyed by Firebase Auth UID."
+    },
+    "/bookings/{bookingId}": {
+      "schema": { "$ref": "#/entities/Booking" },
+      "description": "Photography shoot bookings owned by authenticated users."
+    },
+    "/inquiries/{inquiryId}": {
+      "schema": { "$ref": "#/entities/ContactInquiry" },
+      "description": "Contact Us inquiries submitted by authenticated users."
+    }
+  }
+}

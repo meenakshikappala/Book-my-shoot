@@ -1,0 +1,6 @@
+{
+  "name": "Atelier Lumière — Book My Photo Shoot",
+  "description": "Discover curated editorial photographers, explore portfolios across eight specialized disciplines, and book bespoke photography sessions online.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
