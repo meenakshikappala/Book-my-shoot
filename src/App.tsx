@@ -51,6 +51,7 @@ import {
   MyBookingsSection,
   ContactSection,
 } from './components/MyBookingsAndContact';
+import { ChatWidget } from './components/ChatWidget';
 
 const INITIAL_DEMO_BOOKINGS: BookingRecord[] = [
   {
@@ -1135,6 +1136,14 @@ export default function App() {
         onDirectProfileSession={handleDirectProfileSession}
         authError={authError}
         isAuthenticating={isAuthenticating}
+      />
+
+      {/* Live n8n Concierge Chat Widget */}
+      <ChatWidget
+        onSelectPhotographerProfile={(photog) => setInspectingPhotographer(photog)}
+        onBookPhotographer={(photog) =>
+          handleInitiateBooking(photog, photog.packages[0], photog.availableTimeSlots[0])
+        }
       />
     </div>
   );
